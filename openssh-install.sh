@@ -11,7 +11,7 @@ clear
 export LANG="en_US.UTF-8"
 
 #版本号
-zlib_version="zlib-1.2.12"
+zlib_version="zlib-1.2.13"
 openssl_version="openssl-1.1.1q"
 openssh_version="openssh-9.3p1"
 
