@@ -15,7 +15,7 @@ zlib_version="zlib-1.2.13"
 openssl_version="openssl-1.1.1t"
 openssh_version="openssh-9.3p1"
 
-#安装包地址
+#安装包路径
 file="/opt"
 
 #默认编译路径
