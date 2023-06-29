@@ -22,7 +22,7 @@ file="/opt"
 default="/usr/local" 
 date_time=`date +%Y-%m-%d—%H:%M`
 
-#安装目录
+#解压路径
 file_install="$file/openssh_install"
 file_backup="$file/openssh_backup"
 file_log="$file/openssh_log"
