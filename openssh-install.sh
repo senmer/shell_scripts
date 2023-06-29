@@ -4,7 +4,7 @@
 # Function :openssh-9.3p1 update                        #
 # Platform :Centos7.X                                   #
 # Version  :2.0                                         #
-# Date     :2022-05-01                                  #     
+# Date     :2023-06-29                                  #     
 #########################################################
 
 clear
@@ -12,7 +12,7 @@ export LANG="en_US.UTF-8"
 
 #版本号
 zlib_version="zlib-1.2.13"
-openssl_version="openssl-1.1.1q"
+openssl_version="openssl-1.1.1t"
 openssh_version="openssh-9.3p1"
 
 #安装包地址
@@ -28,12 +28,12 @@ file_backup="$file/openssh_backup"
 file_log="$file/openssh_log"
 
 #源码包链接
-zlib_download="https://www.zlib.net/fossils/$zlib_version.tar.gz"
-openssl_download="https://www.openssl.org/source/$openssl_version.tar.gz"
-openssh_download="https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/$openssh_version.tar.gz"
+zlib_download="https://www.zlib.net/fossils/${zlib_version}.tar.gz"
+openssl_download="https://www.openssl.org/source/${openssl_version}.tar.gz"
+openssh_download="https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/${openssh_version}.tar.gz"
 
 
-Install_make()
+install_make()
 {
 # Check if user is root
 	if [ $(id -u) != "0" ]; then
@@ -93,7 +93,7 @@ echo ""
 }
 
 
-Install_backup()
+install_backup()
 {
 #创建文件（可修改）
 mkdir -p $file_install
@@ -121,25 +121,13 @@ Remove_openssh()
 rpm -e --nodeps `rpm -qa | grep openssh`
 }
 
-Install_tar()
+install_tar()
 {
-#下载的源码包，检查是否解压（可修改）
-#	if [ -e $file/$zlib_version.tar.gz ] && [ -e $file/$openssl_version.tar.gz ] && [ -e /$file/$openssh_version.tar.gz ];then
-#		echo -e " 下载软件源码包已存在  " "\033[32m  Please continue\033[0m"
-#	else
-#		echo -e "\033[33m 未发现本地源码包，链接检查获取中........... \033[0m "
-#	echo ""
-#	cd $file
-#	wget --no-check-certificate  $zlib_download
-#	wget --no-check-certificate  $openssl_download
-#	wget --no-check-certificate  $openssh_download
-#	echo ""
-#	fi
 #zlib
 echo -e "\033[33m 正在下载Zlib软件包...... \033[0m"
 sleep 3
 echo ""
-	if [ -e $file/$zlib_version.tar.gz ] ;then
+	if [ -e $file/${zlib_version}.tar.gz ] ;then
 		echo -e " 下载软件源码包已存在  " "\033[32m  Please continue\033[0m"
 	else
 		echo -e "\033[33m 未发现zlib本地源码包，链接检查获取中........... \033[0m "
@@ -153,7 +141,7 @@ echo ""
 echo -e "\033[33m 正在下载Openssl软件包...... \033[0m"
 sleep 3
 echo ""
-	if  [ -e $file/$openssl_version.tar.gz ]  ;then
+	if  [ -e $file/${openssl_version}.tar.gz ]  ;then
 		echo -e " 下载软件源码包已存在  " "\033[32m  Please continue\033[0m"
 	else
 		echo -e "\033[33m 未发现openssl本地源码包，链接检查获取中........... \033[0m "
@@ -167,7 +155,7 @@ echo ""
 echo -e "\033[33m 正在下载Openssh软件包...... \033[0m"
 sleep 3
 echo ""
-	if [ -e /$file/$openssh_version.tar.gz ];then
+	if [ -e /$file/${openssh_version}.tar.gz ];then
 		echo -e " 下载软件源码包已存在  " "\033[32m  Please continue\033[0m"
 	else
 		echo -e "\033[33m 未发现openssh本地源码包，链接检查获取中........... \033[0m "
@@ -181,11 +169,11 @@ echo ""
 echo ""
 echo ""
 #安装zlib
-Install_zlib(){
+install_zlib(){
 echo -e "\033[33m 1.1-正在解压Zlib软件包...... \033[0m"
 sleep 3
 echo ""
-    cd $file && mkdir -p $file_install && tar -xzf zlib*.tar.gz -C $file_install > /dev/null
+    cd $file && mkdir -p $file_install && tar -xzf ${zlib_version}.tar.gz -C $file_install > /dev/null
     if [ -d $file_install/$zilb_version ];then
 	echo -e "\033[33m--------------------------------------------------------------- \033[0m"
               		echo -e "  zilb解压源码包成功" "\033[32m Success\033[0m"
@@ -202,8 +190,8 @@ echo ""
 echo -e "\033[33m 1.2-正在编译安装Zlib服务.............. \033[0m"
 sleep 3
 echo ""
-    cd $file_install/zlib*
-	./configure --prefix=$default/$zlib_version > $file_log/zlib/zlib_configure_$date_time.txt  #> /dev/null 2>&1
+    cd $file_install/${zlib_version}
+	./configure --prefix=$default/${zlib_version} > $file_log/zlib/zlib_configure_$date_time.txt  #> /dev/null 2>&1
 	if [ $? -eq 0 ];then
 	echo -e "\033[33m make... \033[0m"
 		make > /dev/null 2>&1
@@ -223,10 +211,10 @@ echo ""
 	exit
 	fi
 
-	if [ -e $default/$zlib_version/lib/libz.so ];then
+	if [ -e $default/${zlib_version}/lib/libz.so ];then
 	sed -i '/zlib/'d /etc/ld.so.conf
-	echo "$default/$zlib_version/lib" >> /etc/ld.so.conf
-	echo "$default/$zlib_version/lib" >> /etc/ld.so.conf.d/zlib.conf
+	echo "$default/${zlib_version}/lib" >> /etc/ld.so.conf
+	echo "$default/${zlib_version}/lib" >> /etc/ld.so.conf.d/zlib.conf
 	ldconfig -v > $file_log/zlib/zlib_ldconfig_$date_time.txt > /dev/null 2>&1
 	/sbin/ldconfig
 	fi
@@ -234,12 +222,12 @@ echo ""
 
 echo ""
 echo ""
-Install_openssl(){
+install_openssl(){
 echo -e "\033[33m 2.1-正在解压Openssl...... \033[0m"
 sleep 3
 echo ""
-    cd $file  &&  tar -xvzf openssl*.tar.gz -C $file_install > /dev/null
-	if [ -d $file_install/$openssl_version ];then
+    cd $file  &&  tar -xvzf ${openssl_version}.tar.gz -C $file_install > /dev/null
+	if [ -d $file_install/${openssl_version} ];then
 	echo -e "\033[33m--------------------------------------------------------------- \033[0m"
               		echo -e "  OpenSSL解压源码包成功" "\033[32m Success\033[0m"
 	echo -e "\033[33m--------------------------------------------------------------- \033[0m"
@@ -255,8 +243,8 @@ echo ""
 echo -e "\033[33m 2.2-正在编译安装Openssl服务...... \033[0m"
 sleep 3
 echo ""
-	cd $file_install/$openssl_version
-        ./config shared zlib --prefix=$default/$openssl_version >  $file_log/ssl/ssl_config_$date_time.txt  #> /dev/null 2>&1
+	cd $file_install/${openssl_version}
+        ./config shared zlib --prefix=$default/${openssl_version} >  $file_log/ssl/ssl_config_$date_time.txt  #> /dev/null 2>&1
 	if [ $? -eq 0 ];then
 	echo -e "\033[33m make clean... \033[0m"
 		make clean > /dev/null 2>&1
@@ -277,12 +265,12 @@ echo ""
 	fi
 
 	mv /usr/bin/openssl /usr/bin/openssl_$date_time.bak    #先备份
-	if [ -e $default/$openssl_version/bin/openssl ];then
+	if [ -e $default/${openssl_version}/bin/openssl ];then
 	sed -i '/openssl/'d /etc/ld.so.conf
-	echo "$default/$openssl_version/lib" >> /etc/ld.so.conf
-	ln -s $default/$openssl_version/bin/openssl /usr/bin/openssl
-	ln -s $default/$openssl_version/lib/libssl.so.1.1 /usr/lib64/libssl.so.1.1 
-	ln -s $default/$openssl_version/lib/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1 
+	echo "$default/${openssl_version}/lib" >> /etc/ld.so.conf
+	ln -s $default/${openssl_version}/bin/openssl /usr/bin/openssl
+	ln -s $default/${openssl_version}/lib/libssl.so.1.1 /usr/lib64/libssl.so.1.1 
+	ln -s $default/${openssl_version}/lib/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1 
 	ldconfig -v > $file_log/ssl/ssl_ldconfig_$date_time.txt > /dev/null 2>&1
 	/sbin/ldconfig
 	echo -e "\033[33m--------------------------------------------------------------- \033[0m"
@@ -307,12 +295,12 @@ echo ""
 }
 echo ""
 echo ""
-Install_openssh(){
+install_openssh(){
 echo -e "\033[33m 3.1-正在解压OpenSSH...... \033[0m"
 sleep 3
 echo ""
-	cd $file && tar -xvzf openssh*.tar.gz -C $file_install > /dev/null
-	if [ -d $file_install/$openssh_version ];then
+	cd $file && tar -xvzf ${openssh_version}.tar.gz -C $file_install > /dev/null
+	if [ -d $file_install/${openssh_version} ];then
 	echo -e "\033[33m--------------------------------------------------------------- \033[0m"
          echo -e "  OpenSSh解压源码包成功" "\033[32m Success\033[0m"
 	echo -e "\033[33m--------------------------------------------------------------- \033[0m"
@@ -329,8 +317,8 @@ echo -e "\033[33m 3.2-正在编译安装OpenSSH服务...... \033[0m"
 sleep 3
 echo ""
 	mv /etc/ssh /etc/ssh_$date_time.bak     #先备份
-	cd $file_install/$openssh_version
-	./configure --prefix=$default/$openssh_version --sysconfdir=/etc/ssh --with-ssl-dir=$default/$openssl_version --with-zlib=$default/$zlib_version >  $file_log/ssh/ssh_configure_$date_time.txt   #> /dev/null 2>&1
+	cd $file_install/${openssh_version}
+	./configure --prefix=$default/${openssh_version} --sysconfdir=/etc/ssh --with-ssl-dir=$default/${openssl_version} --with-zlib=$default/${zlib_version} >  $file_log/ssh/ssh_configure_$date_time.txt   #> /dev/null 2>&1
 	if [ $? -eq 0 ];then
 	echo -e "\033[33m make -j 4... \033[0m"
 		make -j 4 > /dev/null 2>&1
@@ -355,7 +343,7 @@ echo ""
 	sleep 2
 	echo -e "\033[32m==================== OpenSSH—file veriosn =================== \033[0m"
 	echo ""
-		/usr/local/$openssh_version/bin/ssh -V
+		/usr/local/${openssh_version}/bin/ssh -V
 	echo ""
 	echo -e "\033[32m======================================================= \033[0m"
 	sleep 3
@@ -370,7 +358,7 @@ echo ""
 	else
 		echo -e " /etc/init.d/sshd不存在 " "\033[31m Not backed up(可忽略)\033[0m"
 	fi
-	cp -rf $file_install/$openssh_version/contrib/redhat/sshd.init /etc/init.d/sshd;
+	cp -rf $file_install/${openssh_version}/contrib/redhat/sshd.init /etc/init.d/sshd;
 
 	chmod u+x /etc/init.d/sshd;
 	chkconfig --add sshd      ##自启动
@@ -388,14 +376,14 @@ echo ""
 	else
         echo -e " sshd.pam不存在" "\033[31m Not backed up(可忽略)\033[0m"
 	fi
-	cp -rf $file_install/$openssh_version/contrib/redhat/sshd.pam /etc/pam.d/sshd.pam
+	cp -rf $file_install/${openssh_version}/contrib/redhat/sshd.pam /etc/pam.d/sshd.pam
 #迁移ssh_config	
-	cp -rf $file_install/$openssh_version/sshd_config /etc/ssh/sshd_config
+	cp -rf $file_install/${openssh_version}/sshd_config /etc/ssh/sshd_config
 	sed -i 's/Subsystem/#Subsystem/g' /etc/ssh/sshd_config
-	echo "Subsystem sftp $default/$openssh_version/libexec/sftp-server" >> /etc/ssh/sshd_config
-	cp -rf $default/$openssh_version/sbin/sshd /usr/sbin/sshd
-	cp -rf /$default/$openssh_version/bin/ssh /usr/bin/ssh
-	cp -rf $default/$openssh_version/bin/ssh-keygen /usr/bin/ssh-keygen
+	echo "Subsystem sftp $default/${openssh_version}/libexec/sftp-server" >> /etc/ssh/sshd_config
+	cp -rf $default/${openssh_version}/sbin/sshd /usr/sbin/sshd
+	cp -rf /$default/${openssh_version}/bin/ssh /usr/bin/ssh
+	cp -rf $default/${openssh_version}/bin/ssh-keygen /usr/bin/ssh-keygen
 	sed -i 's/#PasswordAuthentication\ yes/PasswordAuthentication\ yes/g' /etc/ssh/sshd_config
 	#grep -v "[[:space:]]*#" /etc/ssh/sshd_config  |grep "PubkeyAuthentication yes"
 	echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
@@ -409,9 +397,9 @@ echo ""
 	echo ""
 	sleep 2
 	#删除源码包（可修改）
-	rm -rf $file/*$zlib_version.tar.gz
-	rm -rf $file/*$openssl_version.tar.gz
-	rm -rf $file/*$openssh_version.tar.gz
+	rm -rf $file/*${zlib_version}.tar.gz
+	rm -rf $file/*${openssl_version}.tar.gz
+	rm -rf $file/*${openssh_version}.tar.gz
 	#rm -rf $file_install
 echo -e "\033[33m 3.4-正在输出 OpenSSH 版本...... \033[0m"
 sleep 3
@@ -431,7 +419,7 @@ echo ""
 	echo ""
 }
 
-End_install()
+end_install()
 {
 
 ##sshd状态
@@ -463,12 +451,12 @@ echo -e "\033[33m======================================================= \033[0m
 }
 
 
-Install_make
-Install_backup
+install_make
+install_backup
 Remove_openssh
-Install_tar
-Install_zlib
-Install_openssl
-Install_openssh
-End_install
+install_tar
+install_zlib
+install_openssl
+install_openssh
+end_install
 
