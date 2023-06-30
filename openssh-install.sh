@@ -7,6 +7,12 @@
 # Date     :2023-06-29                                  #     
 #########################################################
 
+#注意：该脚本会升级openssl库（该库被很多其他软件依赖，直接升级可能导致系统故障，因此可选择只升级openssh）
+
+#参考链接：
+# https://blog.csdn.net/wlc_1111/article/details/125228426
+# https://blog.51cto.com/techsnail/2138927
+
 clear
 export LANG="en_US.UTF-8"
 
